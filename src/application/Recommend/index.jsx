@@ -1,6 +1,8 @@
 import React from 'react'
 import Slider from '../../components/Slider';
 import RecommendList from '../../components/RecommendList'
+import Scroll from '../../components/Scroll';
+import { Content } from './style';
 
 export default function Recommend() {
 
@@ -10,17 +12,22 @@ export default function Recommend() {
   });
   const recommendList = [1,2,3,4,5,6,7,8,9,10].map (item => {
     return {
-      id: 1,// https://p1.music.126.net/fhmefjUfMD-8qtj3JKeHbA==/18999560928537533.jpg
-      picUrl: "https://th.bing.com/th?id=OIP.DPOY80O3m2SekZuWU-CFlwHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2",
+      id: 1, // https://p1.music.126.net/fhmefjUfMD-8qtj3JKeHbA==/18999560928537533.jpg
+      picUrl: "https://p1.music.126.net/fhmefjUfMD-8qtj3JKeHbA==/18999560928537533.jpg",
       playCount: 17171122,
       name: "朴树、许巍、李健、郑钧、老狼、赵雷"
     }
   });
 
   return (
-    <div>
-      <Slider bannerList={bannerList}></Slider>
-      <RecommendList recommendList={recommendList}></RecommendList> 
-    </div>
+    <Content>
+      <Scroll className="list">
+        <div>
+          <Slider bannerList={bannerList}></Slider>
+          <RecommendList recommendList={recommendList}></RecommendList> 
+        </div>
+      </Scroll>
+    </Content>
+    
   )
 }

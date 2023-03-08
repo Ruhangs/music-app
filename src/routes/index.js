@@ -1,4 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
+import { Navigate } from "react-router"
 import Home from "../application/Home"
 import Rank from "../application/Rank"
 import Recommend from "../application/Recommend"
@@ -22,6 +23,10 @@ export default [
         path:"rank",
         element:<Rank />,
       },
+      {
+        path:'/',
+        element:<Navigate to='recommend'></Navigate>
+      }
     ]
   }
 ]
