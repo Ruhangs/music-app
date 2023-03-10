@@ -1,70 +1,170 @@
-# Getting Started with Create React App
+### 图片懒加载 （性能优化一）
+yarn add react-lazyload --save
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+图片懒加载
+在大量图片加载的情况下，会造成页面空白甚至卡顿，然而我们的视口就这么大，因此只需要让视口内的图片显示即可，同时图片未显示的时候给它一个默认的 src，让一张非常精简的图片占位。这就是图片懒加载的原理。当然，在本项目中，我们采取一个成熟的方案 react-lazyload 库，易上手，效果不错。
 
-In the project directory, you can run:
+npm install react-lazyload --save
+//components/list.js
+// 引入
+import LazyLoad from "react-lazyload";
 
-### `npm start`
+//img 标签外部包裹一层 LazyLoad
+<LazyLoad placeholder={<img width="100%" height="100%" src={require ('./music.png')} alt="music"/>}>
+  <img src={item.picUrl + "?param=300x300"} width="100%" height="100%" alt="music"/>
+</LazyLoad>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+现在我们做到了视口内的图片显示真实资源，视口外则显示占位图片，那么当我们滑动的时候，如何让下面相应的图片显示呢？
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+其实也相当简单，在 Recommend/index.js 中:
 
-### `npm test`
+// 引入 forceCheck 方法
+import { forceCheck } from 'react-lazyload';
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+//scroll 组件中应用这个方法
+<Scroll className="list" onScroll={forceCheck}>
+...
+这样随着页面滑动，下面的图片会依次显示，没有任何问题。
 
-### `npm run build`
+进场 loading 效果
+Ajax 请求往往需要一定的时间，在这个时间内，页面会处于没有数据的状态，也就是空白状态，但是用户点击来的时候看见一片空白的时候心里是非常焦灼的，尤其是 Ajax 的请求时间长达几秒的时候，而 loading 效果便能减缓这种焦急的情绪，并且如果 loading 动画做的漂亮，还能够让人赏心悦目，让用户对 App 产生好感。
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+loading 的重要性不言而喻。因此，我也是这花费了不少力气，折腾出了几个版本的 loading 效果。这里先来写第一版。
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+主要是利用了 CSS3 的 animation-delay 特性，让两个圆交错变化，产生一个涟漪的效果。
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+import React from 'react';
+import styled, { keyframes } from'styled-components';
+import style from '../../assets/global-style';
 
-### `npm run eject`
+const loading = keyframes`
+  0%, 100% {
+    transform: scale(0.0);
+  }
+  50% {
+    transform: scale(1.0);
+  }
+`
+const LoadingWrapper = styled.div`
+  >div {
+    position: fixed;
+    z-index: 1000;
+    left: 0; 
+    right: 0;  
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: 60px;
+    height: 60px;
+    opacity: 0.6;
+    border-radius: 50%;
+    background-color: ${style ["theme-color"]};
+    animation: ${loading} 1.4s infinite ease-in;
+  }
+  >div:nth-child (2) {
+    animation-delay: -0.7s;
+  }
+`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+function Loading ()  {
+  return (
+    <LoadingWrapper>
+      <div></div>
+      <div></div>
+    </LoadingWrapper>
+  );
+}
+ 
+export default React.memo (Loading);
+现在在 Recommend 组件中引入
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+import Loading from '../../baseUI/loading/index';
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+// 在返回的 JSX 代码中
+<Content>
+  ...
+  <Loading></Loading>
+<Content>
+现在你可以看到屏幕中间的 loading。接下来添加 Loading 的控制逻辑。
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+由于数据是异步获取，异步逻辑全在 redux-thunk 中执行，且 loading 和数据之间是一个联动的关系，因此 loading 的状态应放在 redux 管理。
 
-## Learn More
+首先，在 Recommend/store 下的 reducer.js 中:
+//reducer.js
+const defaultState = fromJS ({
+  ...
+  enterLoading: true
+});
+添加 action 的 type 值常量
+//constants.js
+...
+export const CHANGE_ENTER_LOADING = 'recommend/CHANGE_ENTER_LOADING';
+添加 reducer 的逻辑:
+export default (state = defaultState, action) => {
+  switch (action.type) {
+    ...
+    case actionTypes.CHANGE_ENTER_LOADING:
+      return state.set ('enterLoading', action.data);
+    default:
+      return state;
+  }
+}
+然后编写 action：
+//actionCreators.js
+...
+export const changeEnterLoading = (data) => ({
+  type: actionTypes.CHANGE_ENTER_LOADING,
+  data
+});
+// 另外在获取推荐歌单后，应把 loading 状态改为 false
+export const getRecommendList = () => {
+  return (dispatch) => {
+    getRecommendListRequest ().then (data => {
+      dispatch (changeRecommendList (data.result));
+      dispatch (changeEnterLoading (false));// 改变 loading
+    }).catch (() => {
+      console.log ("推荐歌单数据传输错误");
+    });
+  }
+};
+接下来在组件中应用这个 enterLoading:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+//recommend/index.js
+const mapStateToProps = (state) => ({
+  ...
+  enterLoading: state.getIn (['recommend', 'enterLoading'])
+});
+// 返回的 JSX 代码中应用它
+<Content>
+  ...
+  { enterLoading ? <Loading></Loading> : null }
+<Content>
+这样 Loading 效果就正常显示啦！
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Redux 数据缓存
+问题：其实还有一个细节需要我们来优化，就是你现在切换到歌手页面，然后切回到推荐页，你在浏览器的 Network 中会看到又发了两次网络请求，而这两次请求是完全没有必要的，纯属浪费性能。
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
+那如何来优化呢？根据我们这个项目的特点，利用 Redux 的数据来进行页面缓存成本最低，是不二之选。
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+其实操作起来也是非常简单的，只需要做一些小小的改动：
 
-### Making a Progressive Web App
+//Recommend/index.js
+useEffect (() => {
+  // 如果页面有数据，则不发请求
+  //immutable 数据结构中长度属性 size
+  if (!bannerList.size){
+    getBannerDataDispatch ();
+  }
+  if (!recommendList.size){
+    getRecommendListDataDispatch ();
+  }
+}, []);
+这下，我切换到歌手页，再切回来，果然就不会多发请求啦！
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+恭喜你，现在已经完成了推荐模块的内容，是不是相当有成就感呢？后面还有更多有挑战的事情等着你呢，加油！
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+#### useState的异步更新，会导致即将使用的函数获取不到新的值
