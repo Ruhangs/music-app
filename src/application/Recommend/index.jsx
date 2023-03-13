@@ -7,10 +7,12 @@ import RecommendList from '../../components/RecommendList'
 import Scroll from '../../components/Scroll';
 import Loading from '../../baseUI/Loading';
 import { Content } from './style';
+import { Outlet } from 'react-router';
 
 export default function Recommend() {
   const { bannerList, recommendList, onLoading } = useSelector(store => store.recommend)
   const dispatch = useDispatch()
+
   useEffect(() => {
     if(!bannerList.length){
       dispatch(getBannersData())
@@ -21,11 +23,6 @@ export default function Recommend() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
-  //mock 数据
-  // const bannerList = [1,2,3,4].map (item => {
-  //   return { imageUrl: "http://p1.music.126.net/ZYLJ2oZn74yUz5x8NBGkVA==/109951164331219056.jpg" }
-  // });
-
   return (
     <Content>
       <Scroll className="list" onScroll={forceCheck}>
@@ -35,6 +32,7 @@ export default function Recommend() {
         </div>
       </Scroll>
       {onLoading ? <Loading></Loading> : null}
+      <Outlet></Outlet>
     </Content>
   )
 }

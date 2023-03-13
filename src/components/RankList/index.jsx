@@ -1,25 +1,26 @@
 import React from 'react'
 import { List, ListItem  } from './style'
 import SongList from '../SongList'
+import { useNavigate } from 'react-router'
 
 export default function RankList(props) {
   const { rankList } = props
-  console.log(rankList)
+  const navigate = useNavigate()
 
-  // const enterDetail = (name) => {
-  //   const idx = filterIdx(name);
-  //   if(idx === null) {
-  //     alert("暂无相关数据");
-  //     return;
-  //   } 
-  // }
+
+  const enterDetail = (id) => {
+    navigate(`${id}`,{
+      replace:false,
+      state:{id}
+    })
+  }
 
   return (
     <List >
       {
       rankList.map((item) => {
         return (
-          <ListItem key={item.id} tracks={item.tracks}> {/*onClick={() => enterDetail(item.name)}*/}
+          <ListItem key={item.id} tracks={item.tracks} onClick={() => enterDetail(item.id)}>
             <div className="img_wrapper">
               <img src={item.coverImgUrl} alt=""/>
               <div className="decorate"></div>

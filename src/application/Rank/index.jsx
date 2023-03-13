@@ -5,13 +5,12 @@ import Loading from '../../baseUI/Loading'
 import { getRankData } from '../../store/features/rankSlice'
 import { Container, EnterLoading } from './style'
 import { useDispatch, useSelector } from 'react-redux'
+import { Outlet } from 'react-router'
 
 export default function Rank() {
 
-  // const { onLoading } =props
   const onLoading = useSelector(store => store.rank.onLoading)
   const rankList = useSelector(store => store.rank.rankList)
-  console.log(onLoading)
   const dispatch = useDispatch()
 
   useEffect(()=>{
@@ -32,6 +31,7 @@ export default function Rank() {
           { onLoading ? <EnterLoading><Loading></Loading></EnterLoading> : null }
         </div>
       </Scroll> 
+      <Outlet></Outlet>
       {/* {renderRoutes(props.route.routes)} */}
     </Container>
   )

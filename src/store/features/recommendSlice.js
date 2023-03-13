@@ -29,7 +29,7 @@ export const recommendSlice = createSlice({
       console.log("请求处理中。。。。");
     })
     .addCase(getBannersData.fulfilled,(state, {payload}) => {
-      console.log("获取成功",payload);
+      console.log("获取成功");
       state.onLoading = false
       state.bannerList = payload
     })
@@ -42,7 +42,7 @@ export const recommendSlice = createSlice({
       console.log("请求处理中。。。。");
     })
     .addCase(getRecommendData.fulfilled,(state, { payload }) => {
-      console.log("获取成功",payload);
+      console.log("获取成功");
       state.recommendList = payload
     })
     .addCase(getRecommendData.rejected, (state,{ err }) => {

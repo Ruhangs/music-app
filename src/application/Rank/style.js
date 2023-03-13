@@ -22,3 +22,4 @@ export const EnterLoading = styled.div`
   height: 100px;
   margin: auto;
 `
+

@@ -173,3 +173,4 @@ export const alphaTypes = [{
   }
 ];
 
+export const HEADER_HEIGHT = 45

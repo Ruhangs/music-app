@@ -5,7 +5,7 @@ import Rank from "../application/Rank"
 import Recommend from "../application/Recommend"
 import Singers from "../application/Singers"
 import Album from "../application/Album"
-// import { Navigate } from "react-router-dom"
+// import Test from "../application/Test"
 
 export default [
   {
@@ -15,6 +15,12 @@ export default [
       {
         path:"recommend",
         element:<Recommend />,
+        children:[
+          {
+            path:":id",
+            element:<Album />
+          }
+        ]
       },
       {
         path:"singers",

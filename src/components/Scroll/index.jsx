@@ -20,20 +20,20 @@ const Scroll = forwardRef((props,ref) =>  {
 
   // 创建实例
   useEffect(() => {
-      const scroll = new BScroll (scrollContainerRef.current, {
-          scrollX: direction === "horizental",
-          scrollY: direction === "vertical",
-          probeType: 3, // 可能会有性能问题 probeType 为 3，任何时候都派发 scroll 事件，包括调用 scrollTo 或者触发 momentum 滚动动画
-          click: click, // BetterScroll 默认会阻止浏览器的原生 click 事件。当设置为 true，BetterScroll 会派发一个 click 事件，我们会给派发的 event 参数加一个私有属性 _constructed，值为 true。
-          bounce:{  //当滚动超过边缘的时候会有一小段回弹动画。设置为 true 则开启动画。
-            top: bounceTop,
-            bottom: bounceBottom
-          }
-        });
-        setBScroll(scroll);
-        return () => {
-          setBScroll(null);
+    const scroll = new BScroll (scrollContainerRef.current, {
+        scrollX: direction === "horizental",
+        scrollY: direction === "vertical",
+        probeType: 3, // 可能会有性能问题 probeType 为 3，任何时候都派发 scroll 事件，包括调用 scrollTo 或者触发 momentum 滚动动画
+        click: click, // BetterScroll 默认会阻止浏览器的原生 click 事件。当设置为 true，BetterScroll 会派发一个 click 事件，我们会给派发的 event 参数加一个私有属性 _constructed，值为 true。
+        bounce:{  //当滚动超过边缘的时候会有一小段回弹动画。设置为 true 则开启动画。
+          top: bounceTop,
+          bottom: bounceBottom
         }
+      });
+      setBScroll(scroll);
+      return () => {
+        setBScroll(null);
+      }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
     
