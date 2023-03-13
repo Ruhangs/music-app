@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getSingerListRequest } from "../../../api/request";
+import { getSingerListRequest } from "../../api/request";
 
 
 export const getSingerData = createAsyncThunk("getSingerList",async (props) => {

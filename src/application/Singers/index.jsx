@@ -5,7 +5,7 @@ import SingerList from '../../components/SingerList'
 import Scroll from '../../components/Scroll'
 import Loading from "../../baseUI/Loading"
 import { forceCheck } from "react-lazyload"
-import { getSingerData, changePageCount, changePullDownLoading, changePullUpLoading } from '../../application/Singers/store';
+import { getSingerData, changePageCount, changePullDownLoading, changePullUpLoading } from '../../store/features/singerSlice';
 import { ListContainer } from './style' 
 import { typeTypes, areaTypes, alphaTypes } from '../../api/config'
 import { NavContainer } from './style'
@@ -13,9 +13,9 @@ import { NavContainer } from './style'
 export default function Singers() {
 
   
-  let [type, setType] = useState(-1);
-  let [area, setArea] = useState(-1);
-  let [alpha, setAlpha] = useState('');
+  let [type, setType] = useState(sessionStorage.getItem('myType') || '-1');
+  let [area, setArea] = useState(sessionStorage.getItem('myArea') || '-1');
+  let [alpha, setAlpha] = useState(sessionStorage.getItem('myAlpha') || '');
   let [count, setCount] = useState('')
 
   const singerList  = useSelector(store => store.singer.singerList)
@@ -25,7 +25,17 @@ export default function Singers() {
 
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    if(!singerList.length){
+      setCount(0)
+      dispatch(changePageCount(count))
+      dispatch(getSingerData({type,area,alpha,count}))
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+
   let handleUpdateAlpha = (alpha) => {
+    sessionStorage.setItem('myAlpha',alpha)
     setCount(0)
     setAlpha(alpha);
     dispatch(changePageCount(count))
@@ -33,6 +43,7 @@ export default function Singers() {
   }
 
   let handleUpdateType = (type) => {
+    sessionStorage.setItem('myType',type)
     setType(type);
     setCount(0)
     dispatch(changePageCount(count))
@@ -40,18 +51,12 @@ export default function Singers() {
   }
 
   let handleUpdateArea = (area) => {
+    sessionStorage.setItem('myArea',area)
     setCount(0)
     setArea(area);
     dispatch(changePageCount(count))
     dispatch(getSingerData({type,area,alpha,count}))
   }
-
-  useEffect(() => {
-    setCount(0)
-    dispatch(changePageCount(count))
-    dispatch(getSingerData({type,area,alpha,count}))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
 
   const handlePullUp = () => {
     setCount(++count)

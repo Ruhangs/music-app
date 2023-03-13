@@ -20,41 +20,41 @@ export {
 
 
 export const typeTypes = [{
-    key:-1,
+    key:"-1",
     name:"全部"
   },
   {
-    key:1,
+    key:"1",
     name:"男歌手"
   },
   {
-    key:2,
+    key:"2",
     name:"女歌手"
   },
   {
-    key:3,
+    key:"3",
     name:"乐队"
   },
 ]
 
 export const areaTypes = [{
-    key:-1,
+    key:"-1",
     name:"全部"
   },
   {
-    key:7,
+    key:"7",
     name:"华语"
   },
   {
-    key:96,
+    key:"96",
     name:"欧美"
   },
   {
-    key:8,
+    key:"8",
     name:"日本"
   },
   {
-    key:16,
+    key:"16",
     name:"韩国"
   },
   {
@@ -172,3 +172,4 @@ export const alphaTypes = [{
     name: "Z"
   }
 ];
+

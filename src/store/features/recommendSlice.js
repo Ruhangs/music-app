@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getBannerRequest,getRecommendListRequest } from "../../../api/request"
+import { getBannerRequest,getRecommendListRequest } from "../../api/request"
 
 export const getBannersData = createAsyncThunk("getBannerListRequest", async () => {  // 异步获取banners
   const response = await getBannerRequest()

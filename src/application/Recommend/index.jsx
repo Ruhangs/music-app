@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { forceCheck } from 'react-lazyload';
 import { useSelector, useDispatch } from 'react-redux';
-import { getBannersData,getRecommendData } from './store';
+import { getBannersData,getRecommendData } from '../../store/features/recommendSlice';
 import Slider from '../../components/Slider';
 import RecommendList from '../../components/RecommendList'
 import Scroll from '../../components/Scroll';
