@@ -6,11 +6,12 @@ import { useNavigate, useParams } from 'react-router';
 import Scroll from '../../components/Scroll';
 import Header from '../../baseUI/Header';
 import Loading from '../../baseUI/Loading';
-import { getName, getCount, isEmptyObject } from '../../api/utils';
+import { isEmptyObject } from '../../api/utils';
 import { getAlnumData, changeState } from '../../store/features/albumSlice';
-import { Container, TopDesc, Menu, SongList, SongItem } from './style'
+import { Container, TopDesc, Menu } from './style'
 import { HEADER_HEIGHT } from './../../api/config';
 import style from "../../assets/global-style"
+import SongsList from '../SongsList';
 
 
 
@@ -116,7 +117,14 @@ export default function Album(props) {
                 更多
               </div>
             </Menu>
-            <SongList>
+            <SongsList
+              songs={currentAlbum.tracks}
+              collectCount={currentAlbum.subscribedCount}
+              showCollect={true}
+              // showBackground={true}
+              // musicAnimation={musicAnimation}
+            ></SongsList>
+            {/* <SongList>
               <div className="first_line">
                 <div className="play_all">
                   <i className="iconfont">&#xe6e3;</i>
@@ -131,7 +139,7 @@ export default function Album(props) {
                 {
                   currentAlbum.tracks.map ((item, index) => {
                     return (
-                      <li key={index}>
+                      <li key={index} >
                         <span className="index">{index + 1}</span>
                         <div className="info">
                           <span>{item.name}</span>
@@ -144,7 +152,7 @@ export default function Album(props) {
                   })
                 }
               </SongItem>
-            </SongList>
+            </SongList> */}
           </div>  
         </Scroll> : null
         }

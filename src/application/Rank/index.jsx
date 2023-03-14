@@ -6,6 +6,7 @@ import { getRankData } from '../../store/features/rankSlice'
 import { Container, EnterLoading } from './style'
 import { useDispatch, useSelector } from 'react-redux'
 import { Outlet } from 'react-router'
+import { getGlobalRank, getOfficialRank } from '../../api/utils'
 
 export default function Rank() {
 
@@ -21,18 +22,21 @@ export default function Rank() {
   // 榜单数据未加载出来之前都给隐藏
   let displayStyle = onLoading ? {"display":"none"}:  {"display": ""};
 
+  let globalRankList = getGlobalRank(rankList)
+  let officialRankList = getOfficialRank(rankList)
+
   return (
     <Container>
       <Scroll>
         <div>
-          <h1 className="offical" style={displayStyle}> 榜单详情 </h1>
-          <RankList rankList={rankList}></RankList>
-          {/* <h1 className="global" style={displayStyle}> 全球榜 </h1> */}
+          <h1 className="offical" style={displayStyle}> 官方榜 </h1>
+          <RankList rankList={officialRankList}></RankList>
+          <h1 className="global" style={displayStyle}> 全球榜 </h1>
+          <RankList rankList={globalRankList} global={true}></RankList>
           { onLoading ? <EnterLoading><Loading></Loading></EnterLoading> : null }
         </div>
       </Scroll> 
       <Outlet></Outlet>
-      {/* {renderRoutes(props.route.routes)} */}
     </Container>
   )
 }

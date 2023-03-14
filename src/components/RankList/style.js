@@ -23,8 +23,8 @@ export const ListItem = styled.li`
   padding: 3px 0;
   border-bottom: 1px solid ${style["border-color"]};
   .img_wrapper {
-    width:  ${props => props.tracks.length ? "32vw": "32vw"};
-    height: ${props => props.tracks.length ? "32vw": "32vw"};
+    width:  ${props => props.tracks.length ? "28vw": "32vw"};
+    height: ${props => props.tracks.length ? "28vw": "32vw"};
     border-radius: 3px;
     position: relative;
     .decorate {

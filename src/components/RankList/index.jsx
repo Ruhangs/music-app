@@ -4,7 +4,7 @@ import SongList from '../SongList'
 import { useNavigate } from 'react-router'
 
 export default function RankList(props) {
-  const { rankList } = props
+  const { rankList,global } = props
   const navigate = useNavigate()
 
 
@@ -16,7 +16,7 @@ export default function RankList(props) {
   }
 
   return (
-    <List >
+    <List globalRank={global}>
       {
       rankList.map((item) => {
         return (

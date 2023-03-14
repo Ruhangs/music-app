@@ -1,15 +1,26 @@
-import React,{ forwardRef } from 'react';
+import React,{ forwardRef, useEffect } from 'react';
 import { SongList, SongItem } from "./style";
 import { getName } from '../../api/utils';
+import { useDispatch } from 'react-redux';
+import { changeSequecePlayList, changeCurrentIndex, changePlayList } from '../../store/features/playerSlice'
 
 const SongsList = forwardRef((props, refs)=> {
 
   const { collectCount, showCollect, songs } = props;
 
+  const dispatch = useDispatch()
   const totalCount = songs.length;
 
+
+  useEffect(() => {
+    dispatch(changeSequecePlayList(songs))
+    dispatch(changePlayList(songs))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+
   const selectItem = (e, index) => {
-    console.log (index);
+    dispatch(changeCurrentIndex(index))
+    // musicAnimation(e.nativeEvent.clientX, e.nativeEvent.clientY);
   }
 
   let songList = (list) => {
@@ -39,10 +50,11 @@ const SongsList = forwardRef((props, refs)=> {
       </div>
     )
   };
+
   return (
     <SongList ref={refs} showBackground={props.showBackground}>
       <div className="first_line">
-        <div className="play_all" onClick={(e) => selectItem (e, 0)}>
+        <div className="play_all" onClick={(e) => selectItem(e, 0)}>
           <i className="iconfont">&#xe6e3;</i>
           <span > 播放全部 <span className="sum">(共 {totalCount} 首)</span></span>
         </div>
