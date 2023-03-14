@@ -5,6 +5,7 @@ import Rank from "../application/Rank"
 import Recommend from "../application/Recommend"
 import Singers from "../application/Singers"
 import Album from "../application/Album"
+import Singer from "../application/Singer"
 // import Test from "../application/Test"
 
 export default [
@@ -25,6 +26,12 @@ export default [
       {
         path:"singers",
         element:<Singers />,
+        children:[
+          {
+            path:":id",
+            element:<Singer />
+          }
+        ]
       },
       {
         path:"rank",

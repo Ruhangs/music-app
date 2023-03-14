@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { Outlet } from 'react-router';
 import Horizen from '../../baseUI/horizen-item'
 import SingerList from '../../components/SingerList'
 import Scroll from '../../components/Scroll'
@@ -109,6 +110,7 @@ export default function Singers() {
         </Scroll>
       </ListContainer> 
       { onLoading ? <Loading ></Loading> : null}
+      <Outlet></Outlet>
     </>
   )
 }
