@@ -7,11 +7,11 @@ import {
     changPlayingState,
     changeCurrentIndex,
     changePlayList,
-    // changeSequecePlayList,
-    // changeShowPlayList 
+    changeShowPlayList 
 } from '../../store/features/playerSlice'
 import MiniPlayer from './MiniPlayer'
 import NormalPlayer from './NormalPlayer'
+import PlayList from '../../components/PlayList'
 import { getSongUrl,isEmptyObject, shuffle, findIndex } from '../../api/utils'
 import { playMode } from '../../api/config'
 
@@ -56,7 +56,7 @@ export default function Player() {
     setCurrentTime(0);//从头开始播放
     setDuration((current.dt / 1000) | 0);//时长
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIndex,preSong]);
+  }, [currentIndex,preSong,currentSong]);
 
   useEffect(() => {
     playing ? audioRef.current.play() : audioRef.current.pause();
@@ -162,6 +162,7 @@ export default function Player() {
           fullScreen={fullScreen} 
           toggleFullScreen={toggleFullScreen}
           togglePlayingState={togglePlayingState}
+          changeShowPlayList={changeShowPlayList}
         ></MiniPlayer> 
       }
       { isEmptyObject(currentSong) ? null : 
@@ -180,8 +181,10 @@ export default function Player() {
           handlePrev={handlePrev}
           handleNext={handleNext}
           changeMode={changeMode}
+          changeShowPlayList={changeShowPlayList}
         ></NormalPlayer>
       }
+      <PlayList></PlayList>
       <audio 
         ref={audioRef} 
         onTimeUpdate={updateTime}

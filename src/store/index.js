@@ -13,7 +13,7 @@ const store = configureStore({
     rank:rankSlice,
     album:albumSlice,
     singerDetail:singerDetailSlice,
-    player:playerSlice
+    player:playerSlice,
   }
 })
 

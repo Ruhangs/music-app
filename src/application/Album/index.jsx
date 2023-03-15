@@ -26,8 +26,9 @@ export default function Album(props) {
   const headerEl = useRef();
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const currentAlbum = useSelector(store => store.album.currentAlbum)
-  const onLoading = useSelector(store => store.album.onLoading)
+  const { currentAlbum, onLoading } = useSelector(store => store.album)
+  const { playList } = useSelector(store => store.player)
+
 
   const id = useParams().id
 
@@ -72,7 +73,7 @@ export default function Album(props) {
       unmountOnExit
       onExited={exit}
     >
-      <Container>
+      <Container play={playList.length}>
         <Header ref={headerEl} title={title} handleClick={handleBack} isMarquee={isMarquee}></Header>
         {
           !isEmptyObject(currentAlbum) ? <Scroll bounceTop={false} onScroll={handleScroll}>

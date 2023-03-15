@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { playMode } from "../../api/config";
+import { findIndex } from "../../api/utils";
 
 
 const playerSlice  = createSlice({
@@ -40,14 +41,36 @@ const playerSlice  = createSlice({
             preState.playList = payload
         },
         changeShowPlayList(preState, { payload }){
-
+            preState.showPlayList = payload
         },
         changeCurrentIndex(preState, { payload }){
             preState.currentIndex = payload
-        }
+        },
+        deleteSong(preState,{payload}){
+            // preState.playList
+            // 也可用 loadsh 库的 deepClone 方法。这里深拷贝是基于纯函数的考虑，不对参数 state 做修改
+            const playList = JSON.parse(JSON.stringify(preState.playList));
+            const sequenceList = JSON.parse(JSON.stringify(preState.sequencePlayList));
+            let currentIndex = preState.currentIndex
+            // 找对应歌曲在播放列表中的索引
+            const fpIndex = findIndex(payload, playList);
+            // 在播放列表中将其删除
+            playList.splice(fpIndex, 1);
+            // 如果删除的歌曲排在当前播放歌曲前面，那么 currentIndex--，让当前的歌正常播放
+            if (fpIndex < currentIndex) currentIndex--;
+            if (fpIndex === currentIndex){
+                preState.currentSong =playList[currentIndex+1]
+            } 
+            // 在 sequenceList 中直接删除歌曲即可
+            const fsIndex = findIndex(payload, sequenceList);
+            sequenceList.splice (fsIndex, 1);
+            preState.playList = playList
+            preState.sequencePlayList = sequenceList
+            preState.currentIndex = currentIndex
+        },
     }
 })
 
-export const { changeCurrentIndex, changFullScreen,changeCurrentSong,changPlayMode,changPlayingState,changePlayList,changeSequecePlayList,changeShowPlayList} = playerSlice.actions 
+export const { deleteSong, changeCurrentIndex, changFullScreen,changeCurrentSong,changPlayMode,changPlayingState,changePlayList,changeSequecePlayList,changeShowPlayList} = playerSlice.actions 
 
 export default playerSlice.reducer

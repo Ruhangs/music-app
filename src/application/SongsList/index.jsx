@@ -6,21 +6,22 @@ import { changeSequecePlayList, changeCurrentIndex, changePlayList } from '../..
 
 const SongsList = forwardRef((props, refs)=> {
 
-  const { collectCount, showCollect, songs } = props;
+  const { collectCount, showCollect, songs, musicAnimation } = props;
 
   const dispatch = useDispatch()
   const totalCount = songs.length;
 
 
-  useEffect(() => {
-    dispatch(changeSequecePlayList(songs))
-    dispatch(changePlayList(songs))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  // useEffect(() => {
+    
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // },[])
 
   const selectItem = (e, index) => {
     dispatch(changeCurrentIndex(index))
-    // musicAnimation(e.nativeEvent.clientX, e.nativeEvent.clientY);
+    dispatch(changeSequecePlayList(songs))
+    dispatch(changePlayList(songs))
+    musicAnimation(e.nativeEvent.clientX, e.nativeEvent.clientY);
   }
 
   let songList = (list) => {

@@ -10,8 +10,9 @@ import { getGlobalRank, getOfficialRank } from '../../api/utils'
 
 export default function Rank() {
 
-  const onLoading = useSelector(store => store.rank.onLoading)
-  const rankList = useSelector(store => store.rank.rankList)
+  const { onLoading, rankList } = useSelector(store => store.rank)
+  const { playList } = useSelector(store => store.player)
+
   const dispatch = useDispatch()
 
   useEffect(()=>{
@@ -26,7 +27,7 @@ export default function Rank() {
   let officialRankList = getOfficialRank(rankList)
 
   return (
-    <Container>
+    <Container play={playList.length}>
       <Scroll>
         <div>
           <h1 className="offical" style={displayStyle}> 官方榜 </h1>

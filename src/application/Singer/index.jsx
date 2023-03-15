@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getSingerDetailData,changeState } from '../../store/features/singerDetailSlice'
 import { isEmptyObject } from '../../api/utils'
 import Loading from '../../baseUI/Loading'
+import MusicNote from '../../baseUI/music-note'
 
 export default function Singer(props) {
 
@@ -25,9 +26,15 @@ export default function Singer(props) {
   const songScroll = useRef();
   const header = useRef();
   const layer = useRef();
+  const musicNoteRef = useRef();
+
+  const musicAnimation = (x, y) => {
+    musicNoteRef.current.startAnimation ({ x, y });
+  };
 
   const artist = useSelector(store => store.singerDetail.singer)
   const onLoading = useSelector(store => store.singerDetail.onLoading)
+  const { playList } = useSelector(store => store.player)
 
   const id = useParams().id;
   const dispatch = useDispatch()
@@ -104,7 +111,7 @@ export default function Singer(props) {
       unmountOnExit
       onExited={exit}
     >
-      <Container>
+      <Container play={playList.length}>
         <Header title={title} ref={header} handleClick={setShowStatusFalse}></Header>
         {
           !isEmptyObject(artist) ? 
@@ -126,11 +133,13 @@ export default function Singer(props) {
               <SongsList 
                 songs={artist.hotSongs}
                 showCollect={false}
+                musicAnimation={musicAnimation}
               ></SongsList> 
             </Scroll> : null
           }
         </SongListWrapper> 
         { onLoading ? <Loading></Loading> : null}
+        <MusicNote ref={musicNoteRef}></MusicNote>
       </Container>
     </CSSTransition>
     

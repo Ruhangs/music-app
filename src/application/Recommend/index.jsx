@@ -9,8 +9,9 @@ import Loading from '../../baseUI/Loading';
 import { Content } from './style';
 import { Outlet } from 'react-router';
 
-export default function Recommend() {
+export default function Recommend(props) {
   const { bannerList, recommendList, onLoading } = useSelector(store => store.recommend)
+  const { playList } = useSelector(store => store.player)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -24,7 +25,7 @@ export default function Recommend() {
   },[])
 
   return (
-    <Content>
+    <Content play={playList.length}>
       <Scroll className="list" onScroll={forceCheck}>
         <div>
           <Slider bannerList={bannerList}></Slider>
@@ -32,7 +33,8 @@ export default function Recommend() {
         </div>
       </Scroll>
       {onLoading ? <Loading></Loading> : null}
-      <Outlet></Outlet>
+      {/* 子路由组件显示 */}
+      <Outlet></Outlet>  
     </Content>
   )
 }

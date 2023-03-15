@@ -3,11 +3,19 @@ import { getName } from '../../../api/utils'
 import { MiniPlayerContainer } from './style'
 import { CSSTransition } from 'react-transition-group';
 import ProgressCircle from '../../../baseUI/progress-circle';
+import { useDispatch } from 'react-redux';
 
 export default function MiniPlayer(props) {
     const { song, fullScreen, playing, percent } = props;
-    const { toggleFullScreen, togglePlayingState } = props
+    const { toggleFullScreen, togglePlayingState, changeShowPlayList } = props
     const miniPlayerRef = useRef();
+    const dispatch = useDispatch()
+
+
+    const toggleShowPlayListState = (e) => {
+        dispatch(changeShowPlayList(true))
+        e.stopPropagation ();
+    }
 
     return (
         <CSSTransition
@@ -42,7 +50,7 @@ export default function MiniPlayer(props) {
                     </ProgressCircle>
                 </div>
                 <div className="control">
-                    <i className="iconfont">&#xe640;</i>
+                    <i className="iconfont" onClick={toggleShowPlayListState}>&#xe640;</i>
                 </div>
             </MiniPlayerContainer>
         </CSSTransition>

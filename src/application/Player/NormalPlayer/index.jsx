@@ -23,7 +23,8 @@ export default function NormalPlayer(props) {
         onProgressChange,
         handlePrev,
         handleNext,
-        changeMode
+        changeMode,
+        changeShowPlayList
     } = props
     const normalPlayerRef = useRef();
     const cdWrapperRef = useRef();
@@ -185,7 +186,7 @@ export default function NormalPlayer(props) {
                             <i className="iconfont" onClick={handleNext}>&#xe718;</i>
                         </div>
                         <div className="icon i-right">
-                            <i className="iconfont">&#xe640;</i>
+                            <i className="iconfont" onClick={() => {changeShowPlayList(true)}}>&#xe640;</i>
                         </div>
                     </Operators>
                 </Bottom>
