@@ -22,7 +22,7 @@ export const ProgressBarWrapper = styled.div`
       .progress-btn {
         position: relative;
         top: 7px;
-        left: 7px;
+        left: 15px;
         box-sizing: border-box;
         width: 16px;
         height: 16px;
